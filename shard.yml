@@ -4,9 +4,9 @@ version: 0.1.0
 authors:
   - Holden Omans <holden.omans@gmail.com>
 
-targets:
-  entitas-web:
-    main: src/entitas-web.cr
+dependencies:
+  kemal:
+    github: kemalcr/kemal
 
 crystal: 0.36.1
 

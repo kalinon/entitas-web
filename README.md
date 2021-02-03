@@ -1,6 +1,6 @@
 # entitas-web
 
-TODO: Write a description here
+A debug and troubleshooting web plugin for [entitas.cr](https://github.com/spoved/entitas.cr)
 
 ## Installation
 
