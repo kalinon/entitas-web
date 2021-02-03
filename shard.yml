@@ -1,0 +1,13 @@
+name: entitas-web
+version: 0.1.0
+
+authors:
+  - Holden Omans <holden.omans@gmail.com>
+
+targets:
+  entitas-web:
+    main: src/entitas-web.cr
+
+crystal: 0.36.1
+
+license: MIT
