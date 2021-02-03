@@ -1,0 +1,25 @@
+@import "~ag-grid-community/dist/styles/ag-grid.css";
+@import "~ag-grid-community/dist/styles/ag-theme-alpine-dark.css";
+@import "~bootstrap/scss/bootstrap";
+
+@import "default/colors";
+
+.debug {
+  background-color: $solids-labels-plum !important;
+}
+
+.debug1 {
+  background-color: $bluish !important;
+}
+
+.debug2 {
+  background-color: $orangey-red !important;
+}
+
+.debug3 {
+  background-color: $tangerine-two !important;
+}
+
+body {
+  //background-color: #2b2b2b;
+}

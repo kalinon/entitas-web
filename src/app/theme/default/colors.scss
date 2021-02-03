@@ -1,0 +1,104 @@
+$white: #fefefe;
+
+// Diamanti Colors
+$diamanti-green: #00d250;
+$diamanti-grey: #2B2B2B;
+$operator-color: #C70200;
+$helm-color: #1F7A9A;
+$inactive-text-color: #999999;
+$active-back-color: #424243;
+$active-back-shadow: #515355;
+$dark-8-back-color: rgba(0, 0, 0, 0.8);
+$dark-2-back-color: rgba(0, 0, 0, 0.3);
+$dark-1-back-color: rgba(0, 0, 0, 0.2);
+$light-1-back-color: rgba($white, 0.1);
+$validate-error-red: #a94442;
+$light-pale-grey: #e7eaec;
+$dark-pale-grey: #C0C9D3;
+
+// Other colors
+$dark-lime-green: #6dd400;
+$grays-disabled: #19191966;
+$solids-labels-plum: #b620e0;
+$rectangle-style: #93d500;
+$deep-sky-blue: #0a84ff;
+$black: #333333;
+$black-two: #2d2d2d;
+$black-three: #191919;
+$coral: #ff453a;
+$tangerine: #ff9f0a;
+$darkish-green: #24894a;
+$apple: #95c93d;
+$lawn-green: #55980c;
+$dark-sky-blue: #4a90e2;
+$lavender-blue: #8788f6;
+$cool-blue: #4bacb6;
+$bluish: #2492c3;
+$dark-mint: #32d74b;
+$deep-green: #006526;
+$bright-lilac: #bf5af2;
+$dark-periwinkle: #5e5ce6;
+$orangey-red: #ff3b30;
+$marigold: #ffcc00;
+$weird-green: #4cd964;
+$black-four: #000000;
+$white-two: #ffffff;
+$dandelion: #ffd60a;
+$warm-blue: #5856d6;
+$robin-s-egg: #64d2ff;
+$reddish-pink: #ff2d55;
+$robin-s-egg-two: #5ac8fa;
+$lightish-purple: #af52de;
+$tangerine-two: #ff9500;
+$cool-green: #34c759;
+$deep-sky-blue-two: #007aff;
+$reddish-pink-two: #ff375f;
+$pale-purple: #aeaeb2;
+$pale-lilac: #e5e5ea;
+// All the greys
+$gray-0: #1a1a1a;
+$gray-1: #222222;
+$gray-2: #282828;
+$gray-3: #383838;
+$gray-4: #4d4d4d;
+$gray-5: #404040;
+$gray-6: #666666;
+$gray-7: #999;
+$dark-grey: #1c1c1e;
+$dark-grey-two: #2c2c2e;
+$dark-grey-50: #13141580;
+$slate-grey: #636366;
+$light-blue-grey: #c7c7cc;
+$charcoal-grey-two: #48484a;
+$light-blue-grey-two: #d1d1d6;
+$brown-grey: #b3b3b3;
+$charcoal-grey: #3a3a3c;
+$pale-grey: #f2f2f7;
+$brownish-grey: #757575;
+$battleship-grey-24: #7676803d;
+$charcoal-grey-18: #3c3c432e;
+$battleship-grey-20: #78788033;
+$battleship-grey-12: #7676801e;
+$battleship-grey-36: #7878805c;
+$battleship-grey-32: #78788051;
+$pale-grey-30: #ebebf54c;
+$light-blue-grey-three: #c6c6c8;
+$slate-grey-65: #545458a6;
+$charcoal-grey-30: #3c3c434c;
+$charcoal-grey-three: #38383a;
+$pale-grey-18: #ebebf52e;
+$battleship-grey-8: #74748014;
+$pale-grey-60: rgba(235, 235, 245, 0.6);
+$charcoal-grey-29: #3c3c434a;
+$charcoal-grey-60: #3c3c4399;
+$battleship-grey-16: #78788028;
+$battleship-grey-18: #7474802e;
+$blue-grey: #8e8e93;
+
+.text-bluish {
+  color: $bluish;
+}
+
+.text-black {
+  color: $black-three;
+}

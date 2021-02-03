@@ -1,5 +1,11 @@
 require "http/server"
 require "json"
+require "kemal"
+
+get "/api/v1" do
+  "Hello World!"
+end
+
 
 module Entitas
   abstract class Controller
@@ -15,6 +21,8 @@ module Entitas
 
         puts "Listening on http://0.0.0.0:#{port}"
         server.listen(port)
+
+        Kemal.run
       end
     end
   end
