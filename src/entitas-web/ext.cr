@@ -13,6 +13,7 @@ abstract class Entitas::Context
     }
   end
 
+  # :nodoc:
   def _comp_groups(comp_name)
     i = component_names.index(comp_name)
     if i
@@ -20,6 +21,7 @@ abstract class Entitas::Context
     end
   end
 
+  # :nodoc:
   def _comp_pools(comp_name)
     i = component_names.index(comp_name)
     if i
