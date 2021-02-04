@@ -1,10 +1,10 @@
 get "/api/v1/contexts" do
-  Entitas::Contexts.shared_instance.all_contexts.map { |c| c.context_info }.to_json
+  web_contexts.all_contexts.map { |c| c.context_info }.to_json
 end
 
 get "/api/v1/contexts/:name" do |env|
   name = env.params.url["name"]
-  context = Entitas::Contexts.shared_instance.all_contexts.find { |c| c.context_info.name == name }
+  context = web_contexts.all_contexts.find { |c| c.context_info.name == name }
   if context
     context._summary.to_json
   else
@@ -14,7 +14,7 @@ end
 
 get "/api/v1/contexts/:name/entities" do |env|
   name = env.params.url["name"]
-  context = Entitas::Contexts.shared_instance.all_contexts.find { |c| c.context_info.name == name }
+  context = web_contexts.all_contexts.find { |c| c.context_info.name == name }
   if context
     context.get_entities.map do |e|
       {
@@ -33,7 +33,7 @@ get "/api/v1/contexts/:name/entities/:index" do |env|
   name = env.params.url["name"]
   index = env.params.url["index"].to_i
 
-  context = Entitas::Contexts.shared_instance.all_contexts.find { |c| c.context_info.name == name }
+  context = web_contexts.all_contexts.find { |c| c.context_info.name == name }
   if context
     ent = context.get_entities.find { |e| e.creation_index == index }
     if ent
@@ -52,11 +52,11 @@ get "/api/v1/contexts/:name/entities/:index" do |env|
   end
 end
 
-get "/api/v1/contexts/:name/groups/:comp" do |env|
+get "/api/v1/contexts/:name/comp/:comp/groups" do |env|
   name = env.params.url["name"]
   comp_name = env.params.url["comp"]
 
-  context = Entitas::Contexts.shared_instance.all_contexts.find { |c| c.context_info.name == name }
+  context = web_contexts.all_contexts.find { |c| c.context_info.name == name }
   if context
     g = context._comp_groups(comp_name)
     g.to_json
@@ -65,11 +65,11 @@ get "/api/v1/contexts/:name/groups/:comp" do |env|
   end
 end
 
-get "/api/v1/contexts/:name/pools/:comp" do |env|
+get "/api/v1/contexts/:name/comp/:comp/pools" do |env|
   name = env.params.url["name"]
   comp_name = env.params.url["comp"]
 
-  context = Entitas::Contexts.shared_instance.all_contexts.find { |c| c.context_info.name == name }
+  context = web_contexts.all_contexts.find { |c| c.context_info.name == name }
   if context
     g = context._comp_pools(comp_name)
     g.to_json
