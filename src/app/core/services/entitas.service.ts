@@ -4,6 +4,7 @@ import { catchError } from 'rxjs/operators';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { HttpReqConfig } from '../models/http_req_config';
+import { EntitasCollector, EntitasEntity, EntitasEntitySummary, EntitasGroup, EntitasSystemList } from '../models/entitas';
 
 @Injectable({
     providedIn: 'root'
@@ -58,5 +59,37 @@ export class EntitasService {
                 return throwError('Something bad happened; please try again later.');
             }
         }
+    }
+
+    public getSystemsNames(): Observable<string[]> {
+        return this.getResources<string>('api/v1/systems');
+    }
+
+    public getSystem(name: string): Observable<EntitasSystemList> {
+        return this.getResource<EntitasSystemList>(`api/v1/systems/${name}`);
+    }
+
+    public getController(): Observable<EntitasSystemList> {
+        return this.getResource<EntitasSystemList>(`api/v1/controller`);
+    }
+
+    public getContexts(): Observable<EntitasCollector[]> {
+        return this.getResources<EntitasCollector>('api/v1/contexts');
+    }
+
+    public getContext(name: string): Observable<EntitasCollector> {
+        return this.getResource<EntitasCollector>(`api/v1/contexts/${name}`);
+    }
+
+    public getContextEntities(name: string): Observable<EntitasEntitySummary[]> {
+        return this.getResources<EntitasEntitySummary>(`api/v1/contexts/${name}/entities`);
+    }
+
+    public getContextEntity(name: string, index: number): Observable<EntitasEntity> {
+        return this.getResource<EntitasEntity>(`api/v1/contexts/${name}/entities/${index}`);
+    }
+
+    public getContextGroups(name: string): Observable<EntitasGroup[]> {
+        return this.getResources<EntitasGroup>(`api/v1/contexts/${name}/groups`);
     }
 }

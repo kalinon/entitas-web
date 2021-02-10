@@ -1,3 +1,13 @@
+private def entity_short(ent)
+  {
+    name:           ent.to_s,
+    creation_index: ent.creation_index,
+    context:        ent.context_info.name,
+    components:     ent.get_components.reject &.nil?,
+    retain_count:   ent.retain_count,
+  }
+end
+
 abstract class Entitas::Context
   # :nodoc:
   def _summary
@@ -17,7 +27,12 @@ abstract class Entitas::Context
   def _comp_groups(comp_name)
     i = component_names.index(comp_name)
     if i
-      groups_for_index[i]
+      groups_for_index[i].map do |g|
+        {
+          matcher:  g.matcher.to_s,
+          entities: g.entities.map { |ent| entity_short(ent) },
+        }
+      end
     end
   end
 
@@ -68,8 +83,6 @@ class Entitas::Systems
       s.is_a?(Entitas::Systems) ? s._sub_system_names : Array(String).new
     end.flatten.uniq
     (n + _systems.map { |s| s._name }).uniq
-
-    # _sub_systems.map { |s| s.class.to_s }
   end
 
   # :nodoc:
@@ -81,19 +94,8 @@ class Entitas::Systems
   def to_json(json : JSON::Builder)
     json.object do
       json.field("name", self._name)
+      # json.field("class", self.class.to_s)
       json.field("systems", _systems)
-      # json.field("systems", {
-      #   cleanup:    self.cleanup_systems,
-      #   execute:    self.execute_systems.map { |s| {
-      #     name: s.class.to_s,
-      #     reactive: s.is_a?(Entitas::ReactiveSystem),
-      #     # collector: s.is_a?(Entitas::ReactiveSystem) ? s.collector : nil,
-      #     multi_reactive: s.is_a?(Entitas::MultiReactiveSystem),
-      #     # collectors: s.is_a?(Entitas::MultiReactiveSystem) ? s.collectors : nil,
-      #   }},
-      #   initialize: self.initialize_systems,
-      #   tear_down:  self.tear_down_systems,
-      # })
     end
   end
 end
@@ -112,6 +114,15 @@ class Entitas::MultiReactiveSystem
     json.object do
       json.field("name", self._name)
       json.field("collectors", self.collectors)
+    end
+  end
+end
+
+class Entitas::Group(TEntity)
+  def to_json(json)
+    json.object do
+      json.field "matcher", matcher
+      json.field "entities", get_entities.map { |ent| entity_short(ent) }
     end
   end
 end

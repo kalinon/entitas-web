@@ -6,7 +6,6 @@ macro finished
   SYS_LIST = [
     {% for obj in Object.all_subclasses.sort_by { |a| a.name } %}
       {% if obj.ancestors.includes?(Entitas::System) %}
-      {% puts obj %}
       {{obj.id.stringify}},
       {% end %}
     {% end %}
@@ -14,13 +13,14 @@ macro finished
 end
 
 get "/api/v1/systems" do |env|
-  sys = web_controller._systems
-  if sys
-    # sys._sub_system_names.to_json
-    SYS_LIST.uniq.to_json
-  else
-    not_found_resp(env, "Not found")
-  end
+  # sys = web_controller._systems
+  # if sys
+  #   # sys._sub_system_names.to_json
+  #   SYS_LIST.uniq.to_json
+  # else
+  #   not_found_resp(env, "Not found")
+  # end
+  SYS_LIST.uniq.to_json
 end
 
 get "/api/v1/systems/:name" do |env|

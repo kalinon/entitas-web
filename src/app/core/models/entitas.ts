@@ -1,55 +1,57 @@
-// To parse this data:
-//
-//   import { Convert } from "./file";
-//
-//   const contexts = Convert.toContexts(json);
-
-export interface Context {
+export interface EntitasSystemList {
     name: string;
-    size: number;
-    entities: Entity[];
-    components: string[];
-    creation_index: number;
-    info: Info;
-    reusable_entities: number;
-    retained_entities: number;
-    component_pools: { [key: string]: number };
-    groups_for_index: Array<GroupsForIndex[]>;
+    systems: EntitasSystem[];
 }
 
-export interface Info {
+export interface EntitasSystem {
+    name: string;
+    systems?: EntitasSystem[];
+    collector?: EntitasCollector;
+    collectors?: EntitasCollector[];
+}
+
+export interface EntitasCollector {
+    name: string;
+    groups: EntitasGroup[];
+    group_events: number[];
+}
+
+export interface EntitasGroup {
+    matcher: string;
+    entities: EntitasEntity[];
+}
+
+export interface EntitasComponentList {
     name: string;
     component_names: string[];
     component_types: string[];
 }
 
-export interface Entity {
+export interface EntitasComponent {
     name: string;
+    total_entities: number;
+    components: string[];
     creation_index: number;
-    component_indices: number[];
-    components: Array<EntityComponent | null>;
-    context_info: any;
-    retain_count: number;
+    reusable_entities: number;
+    retained_entities: number;
 }
 
-export interface EntityComponent {
+export interface EntitasEntitySummary {
+    name: string;
+    creation_index: number;
+    context: string;
+    components: string[];
+}
+
+export interface EntitasEntity {
+    name: string;
+    creation_index: number;
+    context: string;
+    components: EntitasComponent[];
+}
+
+export interface EntitasComponent {
     name: string;
     unique: boolean;
     data: any;
-}
-
-export interface GroupsForIndex {
-    matcher: string;
-    entities: Entity[];
-}
-
-// Converts JSON strings to/from your types
-export class Convert {
-    public static toContexts(json: string): Context[] {
-        return JSON.parse(json);
-    }
-
-    public static contextsToJson(value: Context[]): string {
-        return JSON.stringify(value);
-    }
 }
