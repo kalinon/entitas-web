@@ -21,13 +21,13 @@ export interface EntitasGroup {
     entities: EntitasEntity[];
 }
 
-export interface EntitasComponentList {
+export interface EntitasContextInfo {
     name: string;
     component_names: string[];
     component_types: string[];
 }
 
-export interface EntitasComponent {
+export interface EntitasContext {
     name: string;
     total_entities: number;
     components: string[];

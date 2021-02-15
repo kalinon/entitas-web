@@ -2,9 +2,17 @@ import { Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import { catchError } from 'rxjs/operators';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { Observable, throwError } from 'rxjs';
+import { BehaviorSubject, Observable, throwError } from 'rxjs';
 import { HttpReqConfig } from '../models/http_req_config';
-import { EntitasCollector, EntitasEntity, EntitasEntitySummary, EntitasGroup, EntitasSystemList } from '../models/entitas';
+import {
+    EntitasCollector,
+    EntitasContext,
+    EntitasContextInfo,
+    EntitasEntity,
+    EntitasEntitySummary,
+    EntitasGroup,
+    EntitasSystemList
+} from '../models/entitas';
 
 @Injectable({
     providedIn: 'root'
@@ -12,7 +20,12 @@ import { EntitasCollector, EntitasEntity, EntitasEntitySummary, EntitasGroup, En
 export class EntitasService {
     private baseUrl: string = environment.api_endpoint;
 
+    public contexts = new BehaviorSubject<EntitasContextInfo[]>(null);
+
     constructor(private http: HttpClient) {
+        this.getContexts().toPromise().then(value => {
+            this.contexts.next(value);
+        });
     }
 
     private getResources<T>(resource: string, headers?: { [header: string]: string | string[]; }): Observable<T[]> {
@@ -39,7 +52,7 @@ export class EntitasService {
     }
 
     // tslint:disable-next-line:typedef
-    public handleError(error: HttpErrorResponse) {
+    private handleError(error: HttpErrorResponse) {
         if (!environment.production) {
             if (error.error instanceof ErrorEvent) {
                 // A client-side or network error occurred. Handle it accordingly.
@@ -62,34 +75,34 @@ export class EntitasService {
     }
 
     public getSystemsNames(): Observable<string[]> {
-        return this.getResources<string>('api/v1/systems');
+        return this.getResources<string>('systems');
     }
 
     public getSystem(name: string): Observable<EntitasSystemList> {
-        return this.getResource<EntitasSystemList>(`api/v1/systems/${name}`);
+        return this.getResource<EntitasSystemList>(`systems/${name}`);
     }
 
     public getController(): Observable<EntitasSystemList> {
-        return this.getResource<EntitasSystemList>(`api/v1/controller`);
+        return this.getResource<EntitasSystemList>(`controller`);
     }
 
-    public getContexts(): Observable<EntitasCollector[]> {
-        return this.getResources<EntitasCollector>('api/v1/contexts');
+    public getContexts(): Observable<EntitasContextInfo[]> {
+        return this.getResources<EntitasContextInfo>('contexts');
     }
 
-    public getContext(name: string): Observable<EntitasCollector> {
-        return this.getResource<EntitasCollector>(`api/v1/contexts/${name}`);
+    public getContext(name: string): Observable<EntitasContext> {
+        return this.getResource<EntitasContext>(`contexts/${name}`);
     }
 
     public getContextEntities(name: string): Observable<EntitasEntitySummary[]> {
-        return this.getResources<EntitasEntitySummary>(`api/v1/contexts/${name}/entities`);
+        return this.getResources<EntitasEntitySummary>(`contexts/${name}/entities`);
     }
 
     public getContextEntity(name: string, index: number): Observable<EntitasEntity> {
-        return this.getResource<EntitasEntity>(`api/v1/contexts/${name}/entities/${index}`);
+        return this.getResource<EntitasEntity>(`contexts/${name}/entities/${index}`);
     }
 
     public getContextGroups(name: string): Observable<EntitasGroup[]> {
-        return this.getResources<EntitasGroup>(`api/v1/contexts/${name}/groups`);
+        return this.getResources<EntitasGroup>(`contexts/${name}/groups`);
     }
 }

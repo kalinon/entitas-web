@@ -10,15 +10,16 @@ import { ThemeModule } from './theme/theme.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CoreModule } from './core/core.module';
 import { HttpClientModule } from '@angular/common/http';
+import { TreeviewModule } from 'ngx-treeview';
 
 @NgModule({
-
     imports: [
         BrowserModule,
         BrowserAnimationsModule,
 
         CoreModule.forRoot(),
         ThemeModule.forRoot(),
+        TreeviewModule.forRoot(),
 
         AppRoutingModule,
         HttpClientModule,

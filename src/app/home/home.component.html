@@ -1,1 +1,35 @@
-<p>home works!</p>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-3 d-flex flex-column">
+            <ngx-treeview
+                    (selectedChange)="onSelectedContextChange($event)"
+                    [config]="config"
+                    [items]="contexts | async"
+            >
+            </ngx-treeview>
+            <ngx-treeview
+                    (selectedChange)="onSelectedComponentChange($event)"
+                    [config]="config"
+                    [items]="components | async"
+            >
+            </ngx-treeview>
+        </div>
+        <div class="col-9 container-fluid">
+            <div class="card-columns">
+                <div class="card border-{{getContextColor(ent.context)}}" *ngFor="let ent of entityList">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            {{ent.name.split("(")[0]}}
+                        </h5>
+                        <div class="d-flex flex-wrap">
+                            <div class="pr-1" *ngFor="let comp of ent.components">
+                                <span class="badge badge-pill badge-{{getComponentColor(comp)}}">{{comp}}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
