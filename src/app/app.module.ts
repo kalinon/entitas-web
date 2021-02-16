@@ -11,6 +11,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CoreModule } from './core/core.module';
 import { HttpClientModule } from '@angular/common/http';
 import { TreeviewModule } from 'ngx-treeview';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
     imports: [
@@ -26,6 +27,7 @@ import { TreeviewModule } from 'ngx-treeview';
 
         NgxSpinnerModule,
         SharedModule,
+        FormsModule,
     ],
     declarations: [
         AppComponent,

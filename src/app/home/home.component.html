@@ -1,15 +1,17 @@
-<div class="container-fluid">
+<div class="container-fluid home-content">
     <div class="row">
         <div class="col-3 d-flex flex-column">
             <ngx-treeview
                     (selectedChange)="onSelectedContextChange($event)"
                     [config]="config"
+                    [itemTemplate]="conTemplate"
                     [items]="contexts | async"
             >
             </ngx-treeview>
             <ngx-treeview
                     (selectedChange)="onSelectedComponentChange($event)"
                     [config]="config"
+                    [itemTemplate]="compTemplate"
                     [items]="components | async"
             >
             </ngx-treeview>
@@ -18,9 +20,9 @@
             <div class="card-columns">
                 <div class="card border-{{getContextColor(ent.context)}}" *ngFor="let ent of entityList">
                     <div class="card-body">
-                        <h5 class="card-title">
+                        <h6 class="card-title">
                             {{ent.name.split("(")[0]}}
-                        </h5>
+                        </h6>
                         <div class="d-flex flex-wrap">
                             <div class="pr-1" *ngFor="let comp of ent.components">
                                 <span class="badge badge-pill badge-{{getComponentColor(comp)}}">{{comp}}</span>
@@ -33,3 +35,54 @@
     </div>
 </div>
 
+<ng-template #conTemplate let-item="item" let-onCheckedChange="onCheckedChange" let-onCollapseExpand="onCollapseExpand">
+    <div class="form-inline row-item">
+        <i class="mr-1" (click)="onCollapseExpand()" *ngIf="item.children" [ngSwitch]="item.collapsed"
+           aria-hidden="true">
+            <svg class="bi bi-caret-right-fill" *ngSwitchCase="true" fill="currentColor" viewBox="0 0 16 16"
+                 width="1rem" xmlns="http://www.w3.org/2000/svg">
+                <path
+                        d="M12.14 8.753l-5.482 4.796c-.646.566-1.658.106-1.658-.753V3.204a1 1 0 0 1 1.659-.753l5.48 4.796a1 1 0 0 1 0 1.506z"/>
+            </svg>
+            <svg class="bi bi-caret-down-fill" *ngSwitchCase="false" fill="currentColor" viewBox="0 0 16 16"
+                 width="1rem" xmlns="http://www.w3.org/2000/svg">
+                <path
+                        d="M7.247 11.14L2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/>
+            </svg>
+        </i>
+        <div class="form-check">
+            <input class="form-check-input" (ngModelChange)="onCheckedChange()" [(ngModel)]="item.checked"
+                   [disabled]="true" [indeterminate]="item.indeterminate" type="checkbox"/>
+            <label class="form-check-label" (click)="item.checked = !item.checked; onCheckedChange()">
+                <span class="badge badge-{{getContextColor(item.text)}}">{{item.text}}</span>
+            </label>
+        </div>
+    </div>
+</ng-template>
+
+<ng-template #compTemplate let-item="item" let-onCheckedChange="onCheckedChange"
+             let-onCollapseExpand="onCollapseExpand">
+    <div class="form-inline row-item">
+        <i class="mr-1" (click)="onCollapseExpand()" *ngIf="item.children" [ngSwitch]="item.collapsed"
+           aria-hidden="true">
+            <svg class="bi bi-caret-right-fill" *ngSwitchCase="true" fill="currentColor" viewBox="0 0 16 16"
+                 width="1rem" xmlns="http://www.w3.org/2000/svg">
+                <path
+                        d="M12.14 8.753l-5.482 4.796c-.646.566-1.658.106-1.658-.753V3.204a1 1 0 0 1 1.659-.753l5.48 4.796a1 1 0 0 1 0 1.506z"/>
+            </svg>
+            <svg class="bi bi-caret-down-fill" *ngSwitchCase="false" fill="currentColor" viewBox="0 0 16 16"
+                 width="1rem" xmlns="http://www.w3.org/2000/svg">
+                <path
+                        d="M7.247 11.14L2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/>
+            </svg>
+        </i>
+        <div class="form-check">
+            <input class="form-check-input" (ngModelChange)="onCheckedChange()" [(ngModel)]="item.checked"
+                   [disabled]="true"
+                   [indeterminate]="item.indeterminate" type="checkbox"/>
+            <label class="form-check-label" (click)="item.checked = !item.checked; onCheckedChange()">
+                <span class="badge badge-{{getComponentColor(item.text)}}">{{item.text}}</span>
+            </label>
+        </div>
+    </div>
+</ng-template>

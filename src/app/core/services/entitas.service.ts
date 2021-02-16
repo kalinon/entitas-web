@@ -5,7 +5,6 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { BehaviorSubject, Observable, throwError } from 'rxjs';
 import { HttpReqConfig } from '../models/http_req_config';
 import {
-    EntitasCollector,
     EntitasContext,
     EntitasContextInfo,
     EntitasEntity,

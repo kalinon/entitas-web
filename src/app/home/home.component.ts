@@ -1,9 +1,9 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { EntitasService } from '../core/services/entitas.service';
 import { BehaviorSubject, Subscription } from 'rxjs';
-import { EntitasContextInfo, EntitasEntitySummary } from '../core/models/entitas';
+import { EntitasContextInfo, EntitasEntity, EntitasEntitySummary } from '../core/models/entitas';
 import { TreeviewConfig, TreeviewItem } from 'ngx-treeview';
-import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
+import { distinctUntilChanged } from 'rxjs/operators';
 
 @Component({
     selector: 'app-home',
@@ -15,9 +15,12 @@ export class HomeComponent implements OnInit, OnDestroy {
     public contexts: BehaviorSubject<TreeviewItem[]> = new BehaviorSubject<TreeviewItem[]>([]);
     public components: BehaviorSubject<TreeviewItem[]> = new BehaviorSubject<TreeviewItem[]>([]);
     public entities: BehaviorSubject<EntitasEntitySummary[]> = new BehaviorSubject<EntitasEntitySummary[]>([]);
+    public selectedEntity: BehaviorSubject<EntitasEntity> = new BehaviorSubject<EntitasEntity>(null);
 
     private selectedContexts: BehaviorSubject<EntitasContextInfo[]> = new BehaviorSubject<EntitasContextInfo[]>([]);
     private selectedComponents: BehaviorSubject<string[]> = new BehaviorSubject<string[]>([]);
+    private contColorMap = new Map<string, string>();
+    private compColorMap = new Map<string, string>();
 
     private colors = [
         'primary',
@@ -26,7 +29,7 @@ export class HomeComponent implements OnInit, OnDestroy {
         'danger',
         'warning',
         'info',
-        'light',
+        // 'light',
         'dark',
     ];
 
@@ -47,17 +50,16 @@ export class HomeComponent implements OnInit, OnDestroy {
 
         this.subscriptions.push(this.selectedContexts
             .pipe(
-                debounceTime(10),
                 distinctUntilChanged(),
             )
             .subscribe(value => {
                 this.updateComponentList(value);
+                // this.updateEntityList(this.selectedComponents.getValue());
             })
         );
 
         this.subscriptions.push(this.selectedComponents
             .pipe(
-                debounceTime(10),
                 distinctUntilChanged(),
             )
             .subscribe(value => {
@@ -65,7 +67,6 @@ export class HomeComponent implements OnInit, OnDestroy {
             })
         );
     }
-
 
     ngOnInit(): void {
     }
@@ -103,7 +104,7 @@ export class HomeComponent implements OnInit, OnDestroy {
         const list: TreeviewItem[] = [];
         context.component_names.forEach(name => {
             const item = new TreeviewItem({
-                text: name,
+                text: name.split('::').pop(),
                 value: name,
                 children: [],
                 collapsed: true,
@@ -111,10 +112,18 @@ export class HomeComponent implements OnInit, OnDestroy {
             });
             list.push(item);
         });
+        list.filter(this.onlyUniqueViewItem);
         return list;
     }
 
+    onlyUniqueViewItem(value, index, self): boolean {
+        return self.findIndex(v => {
+            return value.text === v.text;
+        }) === index;
+    }
+
     public onSelectedContextChange(event: EntitasContextInfo[]): void {
+        console.log(event);
         this.selectedContexts.next(event);
     }
 
@@ -125,7 +134,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     private updateComponentList(value: EntitasContextInfo[]): void {
         let list: TreeviewItem[] = [];
         value.forEach(v => {
-            list = list.concat(this.formatComponents(v));
+            list = list.concat(this.formatComponents(v)).filter(this.onlyUniqueViewItem);
         });
 
         this.components.next([
@@ -139,6 +148,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 
     private updateEntityList(compNames: string[]): void {
         this.entities.next([]);
+
         let list: EntitasEntitySummary[] = [];
         const contexts = this.selectedContexts.getValue();
         for (const cont of contexts) {
@@ -152,36 +162,64 @@ export class HomeComponent implements OnInit, OnDestroy {
     }
 
     get entityList(): EntitasEntitySummary[] {
-        return this.entities.getValue();
+        return this.entities.getValue().filter(entity => {
+            let hasComp = false;
+            entity.components.forEach(comp => {
+                this.selectedComponents.getValue().findIndex(longComp => {
+                    if (longComp.indexOf(comp) !== -1) {
+                        hasComp = true;
+                    }
+                });
+            });
+            return hasComp;
+        });
+        // return this.entities.getValue();
     }
 
     public getContextColor(name: string): string {
-        console.log(name);
+        if (this.contColorMap.get(name)) {
+            return this.contColorMap.get(name);
+        }
+
         const index = this.selectedContexts.getValue().findIndex(value => {
             return value.name === name;
         });
 
         if (index > -1 && index < this.colors.length) {
-            return this.colors[index];
+            this.contColorMap.set(name, this.colors[index]);
+            return this.contColorMap.get(name);
         }
 
         return 'none';
     }
 
     public getComponentColor(name: string): string {
-        console.log(name);
+        if (name === 'Components') {
+            return 'none';
+        }
+
+        if (this.compColorMap.get(name)) {
+            return this.compColorMap.get(name);
+        }
+
         const index = this.selectedComponents.getValue().findIndex(value => {
             if (value === name) {
                 return true;
             } else {
-                return value.endsWith(name);
+                if (typeof (value) === 'string') {
+                    return value.indexOf(name) !== -1;
+                } else {
+                    return false;
+                }
             }
         });
 
         if (index > -1 && index < this.colors.length) {
-            return this.colors[index];
+            this.compColorMap.set(name, this.colors[index]);
+            return this.compColorMap.get(name);
         } else if (index > -1) {
-            return `none-${index}`;
+            this.compColorMap.set(name, `none-${index}`);
+            return this.compColorMap.get(name);
         }
         return 'none';
     }
