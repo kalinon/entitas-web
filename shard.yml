@@ -8,6 +8,6 @@ dependencies:
   kemal:
     github: kemalcr/kemal
 
-crystal: 0.36.1
+crystal: ">= 0.36.1, < 2.0.0"
 
 license: MIT
