@@ -3,7 +3,7 @@ private def entity_short(ent)
     name:           ent.to_s,
     creation_index: ent.creation_index,
     context:        ent.context_info.name,
-    components:     ent.get_components.reject &.nil?,
+    components:     ent.get_components.reject(Nil),
     retain_count:   ent.retain_count,
   }
 end
@@ -79,10 +79,10 @@ class Entitas::Systems
   end
 
   def _sub_system_names
-    n = _systems.map do |s|
+    n = _systems.flat_map do |s|
       s.is_a?(Entitas::Systems) ? s._sub_system_names : Array(String).new
-    end.flatten.uniq
-    (n + _systems.map { |s| s._name }).uniq
+    end.uniq!
+    (n + _systems.map(&._name)).uniq
   end
 
   # :nodoc:

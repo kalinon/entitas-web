@@ -3,7 +3,7 @@ require "./ext"
 # :nodoc:
 def not_found_resp(env, msg)
   env.response.status_code = 404
-  env.response.print ({code: 404, message: msg}.to_json)
+  env.response.print({code: 404, message: msg}.to_json)
   env.response.close
 end
 

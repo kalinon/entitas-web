@@ -4,7 +4,7 @@ end
 
 macro finished
   SYS_LIST = [
-    {% for obj in Object.all_subclasses.sort_by { |a| a.name } %}
+    {% for obj in Object.all_subclasses.sort_by(&.name) %}
       {% if obj.ancestors.includes?(Entitas::System) %}
       {{obj.id.stringify}},
       {% end %}
@@ -12,7 +12,7 @@ macro finished
   ]
 end
 
-get "/api/v1/systems" do |env|
+get "/api/v1/systems" do |_|
   # sys = web_controller._systems
   # if sys
   #   # sys._sub_system_names.to_json

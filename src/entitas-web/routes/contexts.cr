@@ -1,5 +1,5 @@
 get "/api/v1/contexts" do
-  web_contexts.all_contexts.map { |c| c.context_info }.to_json
+  web_contexts.all_contexts.map(&.context_info).to_json
 end
 
 get "/api/v1/contexts/:name" do |env|
@@ -21,7 +21,7 @@ get "/api/v1/contexts/:name/entities" do |env|
         name:           e.to_s,
         creation_index: e.creation_index,
         context:        e.context_info.name,
-        components:     e.get_components.map { |c| c.index.to_s },
+        components:     e.get_components.map(&.index.to_s),
       }
     end.to_json
   else
@@ -41,7 +41,7 @@ get "/api/v1/contexts/:name/entities/:index" do |env|
         name:           ent.to_s,
         creation_index: ent.creation_index,
         context:        ent.context_info.name,
-        components:     ent.get_components.reject &.nil?,
+        components:     ent.get_components.reject(Nil),
         retain_count:   ent.retain_count,
       }.to_json
     else

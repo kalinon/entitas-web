@@ -7,7 +7,7 @@ module Entitas
       ENTITAS_WEB_SHARED.controller = self
 
       spawn do
-        Kemal.run
+        Kemal.run(Array(String).new)
       end
     end
   end
